@@ -1,0 +1,13 @@
+table,th,td{
+    border: 2px solid black;
+}
+table{
+    border-collapse: collapse;
+}
+th{
+    padding: 5px 8px;
+}
+
+#worker-adding{
+    display: none;
+}
