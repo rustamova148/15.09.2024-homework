@@ -6,6 +6,7 @@ const [worker, setWorker] = useState({name:'', age:'', salary:''});
 const [workers, setWorkers] = useState([]);
 const [searchWord, setSearchWord] = useState('');
 const [filteredData, setFilteredData] = useState([]);
+const [editingId, setEditingId] = useState(null);
 
   function handleAdd(){
       document.querySelector('#worker-adding').style.display = 'block';
@@ -53,9 +54,25 @@ const [filteredData, setFilteredData] = useState([]);
 
   function handleEdit(id){
     console.log(id);
-    workers.filter(worker=>worker.id!==id);
+    const workerToEdit = filteredData.find((f,i) => (i+1) === id);
+    setWorker(workerToEdit);
+    setEditingId(id);
     document.querySelector('#worker-editing').style.display = 'block';
     document.querySelector('#worker-adding').style.display = 'none';
+  }
+  
+  function handleConfirmEdit(){
+    const editedWorkers = filteredData.map((one,i) => {
+      if((i+1) === editingId){
+        return worker;
+      }
+      return one;
+    });
+    setWorkers(editedWorkers);
+    setFilteredData(editedWorkers);
+    setEditingId(null);
+
+    document.querySelector('#worker-editing').style.display = 'none';
   }
 
   function handleSearch(e){
@@ -95,7 +112,7 @@ const [filteredData, setFilteredData] = useState([]);
   }
 
   function handleFilterFired(){
-    const firedWorkers = [...workers].filter(worker=> worker.fired === true);
+    const firedWorkers = [...workers].filter(worker=> worker.fired === false);
     setFilteredData(firedWorkers);
     console.log(firedWorkers);
   }
@@ -145,10 +162,10 @@ const [filteredData, setFilteredData] = useState([]);
         <button onClick={handleCancel}>cancel</button>
       </div>
       <div id='worker-editing' style={{display:'none'}}>
-        <input id='nameInp2' type="text" placeholder='name' onChange={e =>setWorker({...worker, name:e.target.value})} />
-        <input id='ageInp2' type="number" placeholder='age' onChange={e =>setWorker({...worker, age:e.target.value})} />
-        <input id='salaryInp2' type="number" placeholder='salary' onChange={e =>setWorker({...worker, salary:e.target.value})} />
-        <button>confirm edit</button>
+        <input id='nameInp2' type="text" placeholder='name' value={worker.name} onChange={e =>setWorker({...worker, name:e.target.value})} />
+        <input id='ageInp2' type="number" placeholder='age' value={worker.age} onChange={e =>setWorker({...worker, age:e.target.value})} />
+        <input id='salaryInp2' type="number" placeholder='salary' value={worker.salary} onChange={e =>setWorker({...worker, salary:e.target.value})} />
+        <button onClick={handleConfirmEdit}>confirm edit</button>
         <button onClick={handleCancelEdit}>cancel</button>
       </div>
       <p>Average Salary: <span id='average'>0</span></p>
@@ -157,5 +174,3 @@ const [filteredData, setFilteredData] = useState([]);
 }
 
 export default App
-
-//edit qaldi aglim qarisdi burada
